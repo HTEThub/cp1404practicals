@@ -36,3 +36,4 @@ def get_grades(EXCELLENCE_THRESHOLD, PASS_THRESHOLD, score):
 
 
 main()
+
