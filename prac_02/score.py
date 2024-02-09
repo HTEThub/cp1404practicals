@@ -1,31 +1,38 @@
-"""
-CP1404/CP5632 - Practical
-Broken program to determine score status
-"""
+import random
 
-""" TODO: Fix this! """
 
-# score = float(input("Enter score: "))
-# if score < 0:
-#     print("Invalid score")
-# else:
-#     if score > 100:
-#         print("Invalid score")
-#     if score > 50:
-#         print("Passable")
-#     if score > 90:
-#         print("Excellent")
-# if score < 50:
-#     print("Bad")
+def main():
+    EXCELLENCE_THRESHOLD = 90
+    PASS_THRESHOLD = 50
+    MAX_SCORE = 100
+    MIN_SCORE = 0
 
-#fixed
-score = float(input("Enter score: "))
-if score < 0 or score > 100:
-    print("Invalid Input")
-else:
-    if score > 90:
-        print("Excellence")
-    elif score >= 50:
-        print("Pass")
+    score = get_validated_score(MAX_SCORE, MIN_SCORE)
+
+    grades = get_grades(EXCELLENCE_THRESHOLD, PASS_THRESHOLD, score)
+
+    print(grades)
+
+    print("Random Score:", random.randint(1, 100))
+
+
+def get_validated_score(MAX_SCORE, MIN_SCORE):
+    """ Get score input and check if it's valid """
+    score = float(input("Enter score: "))
+    while score < MIN_SCORE or score > MAX_SCORE:
+        print("Invalid Input")
+        score = float(input("Enter score: "))
+    return score
+
+
+def get_grades(EXCELLENCE_THRESHOLD, PASS_THRESHOLD, score):
+    """ Grading the scores using threshold """
+    if score > EXCELLENCE_THRESHOLD:
+        return "Excellence"
+    elif score >= PASS_THRESHOLD:
+        return "Pass"
     else:
-        print("Fail")
+        return "Fail"
+
+
+main()
