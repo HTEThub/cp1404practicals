@@ -15,12 +15,11 @@ MIN_PRICE = 1.0
 MAX_PRICE = 100.0
 INITIAL_PRICE = 10.0
 day = 0
-OUTPUT_FILE = "prices_output.txt"
+OUTPUT_FILE = "prices_output"
 
 price = INITIAL_PRICE
-print(f"Starting price: ${price:,.2f}")
-
 out_file = open(OUTPUT_FILE, 'w')
+print(f"Starting price: ${price:,.2f}", file=out_file)
 while MIN_PRICE <= price <= MAX_PRICE:
     price_change = 0
     # generate a random integer of 1 or 2
