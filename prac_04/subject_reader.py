@@ -3,16 +3,18 @@ CP1404/CP5632 Practical
 Data file -> lists program
 """
 
-FILENAME = "subject_data.txt"
+FILENAME = "subject_data"
 
 
 def main():
     data = get_data()
-    print(data)
+    # print(data)
+    display_subject_details(data)
 
 
 def get_data():
     """Read data from file formatted like: subject,lecturer,number of students."""
+    partsList = []
     input_file = open(FILENAME)
     for line in input_file:
         print(line)  # See what a line looks like
@@ -23,7 +25,14 @@ def get_data():
         parts[2] = int(parts[2])  # Make the number an integer (ignore PyCharm's warning)
         print(parts)  # See if that worked
         print("----------")
+        partsList.append(parts)
     input_file.close()
+    return partsList
+
+
+def display_subject_details(data):
+    for eachElement in data:
+        print(f"{eachElement[0]} is taught by {eachElement[1]} and has {eachElement[2]} students")
 
 
 main()
