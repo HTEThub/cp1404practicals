@@ -24,6 +24,7 @@ def main():
 
 
 def read_wimbleton_csv(filename, countries_won, champ_to_wins):
+    """ Open wimbleton_csv file and put its specific data into their own specific data sets """
     with open(filename, "r", encoding="utf-8-sig") as in_file:
         for eachLine in in_file:
             stripped_line = eachLine.strip()
