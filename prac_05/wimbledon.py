@@ -57,7 +57,3 @@ def display_countries_won(countries_won):
 
 
 main()
-
-
-
-
