@@ -84,7 +84,7 @@ def using_csv_namedtuple():
     in_file = open("languages.csv", "r")
     in_file.readline()
     for language in map(Language._make, csv.reader(in_file)):
-        print(language.name, 'was released in', language.year)
+        print(language.brand, 'was released in', language.year)
         print(repr(language))
 
 
