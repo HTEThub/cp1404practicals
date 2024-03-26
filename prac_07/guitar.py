@@ -1,13 +1,13 @@
 class Guitar:
-    def __init__(self, name, year, cost):
-        self.name = name
+    def __init__(self, brand, year, cost):
+        self.brand = brand
         self.year = year
         self.cost = cost
 
         self.age = 0
 
     def __str__(self):
-        return f"{self.name} ({self.year}) : ${self.cost}"
+        return f"{self.brand} ({self.year}) : ${self.cost}"
 
     def get_age(self):
         self.age = 2024 - self.year
@@ -19,4 +19,4 @@ class Guitar:
         if self.year != other.year:
             return self.year < other.year
         else:
-            return self.name < other.name
+            return self.brand < other.brand
