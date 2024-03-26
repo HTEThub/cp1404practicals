@@ -32,7 +32,7 @@ def main():
         elif choice == "D":
             display_projects(projects)
         elif choice == "F":
-            filter_projects()
+            filter_projects(projects)
         elif choice == "A":
             add_new_projects()
         elif choice == "U":
@@ -56,7 +56,7 @@ def load_projects(filename, projects):
 
 
 def save_projects(filename, projects):
-    """ Open a given file and write into it with each Project attribute in the required format"""
+    """ Open a given file and write into it with each Project attribute in the required format """
     with open(filename, 'w', newline="") as out_file:
         out_file.write(f"Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage")
         for project in projects:
@@ -65,7 +65,7 @@ def save_projects(filename, projects):
 
 
 def display_projects(projects):
-    """ Sort Projects by the Percentage of Completion and Print them out"""
+    """ Sort Projects by the Percentage of Completion and Print them out """
     incomplete_proj = []
     completed_proj = []
 
@@ -82,6 +82,26 @@ def display_projects(projects):
     print("\nCompleted Projects/s: ")
     for project in completed_proj:
         print("\t", project)
+
+
+# def compare_start_date(project):
+#     return project.start_date
+
+
+def filter_projects(projects):
+    """ Get user input date and compare it to sorted projects' dates and filter it out """
+    filtered_projects = []
+
+    date_input = input("Show projects that start after date (d/m/yyyy): ")
+    date = datetime.datetime.strptime(date_input, "%d/%m/%Y").date()
+
+    sorted_projects = sorted(projects)
+    for project in sorted_projects:
+        if project.start_date > date:
+            filtered_projects.append(project)
+
+    for project in filtered_projects:
+        print(project)
 
 
 main()
