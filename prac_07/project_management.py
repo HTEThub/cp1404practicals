@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from project import Project
 
 DEFAULT_FILE = "projects.txt"
@@ -6,7 +6,7 @@ DEFAULT_FILE = "projects.txt"
 MENU = "- (L)oad projects\n" \
        "- (S)ave projects\n" \
        "- (D)isplay projects\n" \
-       "- (Filter projects by date\n" \
+       "- (F)ilter projects by date\n" \
        "- (A)dd new project\n" \
        "- (U)pdate project\n" \
        "- (Q)uit project\n"
@@ -43,6 +43,9 @@ def main():
         print("----------")
         print(MENU)
         choice = input(">>> ").upper()
+
+
+""" Main Choices Functions """
 
 
 def load_projects(filename, projects):
@@ -84,16 +87,14 @@ def display_projects(projects):
         print("\t", project)
 
 
-# def compare_start_date(project):
-#     return project.start_date
-
-
 def filter_projects(projects):
     """ Get user input date and compare it to sorted projects' dates and filter it out """
     filtered_projects = []
 
     date_input = input("Show projects that start after date (d/m/yyyy): ")
-    date = datetime.datetime.strptime(date_input, "%d/%m/%Y").date()
+    while not date_validation(date_input):
+        date_input = input("Show projects that start after date (d/m/yyyy): ")
+    date = date_validation(date_input)
 
     sorted_projects = sorted(projects)
     for project in sorted_projects:
@@ -106,15 +107,31 @@ def filter_projects(projects):
 
 def add_new_project(projects):
     """ Get user inputs for new project and add it into projects """
-    proj_name = input("Enter Project Name: ")
-    start_date = input("Enter Start Date (dd/mm/yyyy): ")
-    priority = int(input("Enter Priority: "))
-    cost_estimate = float(input("Enter Cost Estimate: $ "))
-    completion = int(input("Enter Completion: %"))
+
+    proj_name = input("Enter Project Name: ").strip()
+    while proj_name == "":
+        print("Cannot be blank")
+        proj_name = input("Enter Project Name: ").strip()
+
+    start_date = input("Enter Start Date (dd/mm/yyyy): ").strip()
+    while not date_validation(start_date):
+        start_date = input("Enter Start Date (dd/mm/yyyy): ").strip()
+
+    priority = input("Enter Priority: ").strip()
+    while not priority_validation(priority):
+        priority = input("Enter Priority: ").strip()
+
+    cost_estimate = input("Enter Cost Estimate: $").strip()
+    while not cost_validation(cost_estimate):
+        cost_estimate = input("Enter Cost Estimate: $").strip()
+
+    completion = input("Enter Completion: %").strip()
+    while not completion_validation(completion):
+        completion = input("Enter Completion: %").strip()
 
     new_proj = Project(proj_name, start_date, priority, cost_estimate, completion)
     projects.append(new_proj)
-    print(new_proj)
+    # print(new_proj)
     print(f"{proj_name} has been added")
 
 
@@ -123,8 +140,7 @@ def update_project(projects):
     for i, project in enumerate(projects):
         print(f"{i}. {project}")
 
-    project = []
-    project = choice_index_validation(project, projects)
+    project = choice_index_validation(projects)
     print(f"\n{project}")
 
     new_completion = input("Update Completion (leave blank to skip): ").strip()
@@ -146,17 +162,21 @@ def update_project(projects):
             new_priority = input("Update Completion (leave blank to skip): ").strip()
 
 
-def date_validation(date_text):
+""" Error Checking Functions """
+
+
+def date_validation(date_input):
+    """ Error check the date """
     try:
-        datetime_obj = datetime.strptime(date_text, '%d/%m/%Y')
+        datetime_obj = datetime.strptime(date_input, '%d/%m/%Y')
         return datetime_obj.date()
     except ValueError:
         print("Incorrect date format")
         return None
 
 
-def choice_index_validation(project, projects):
-    """ Error check the choice """
+def choice_index_validation(projects):
+    """ Error check the choice index """
     while True:
         try:
             choice = int(input("Choose a Project to update: "))
@@ -170,7 +190,7 @@ def choice_index_validation(project, projects):
 
 
 def priority_validation(number):
-    """ Error check and validate the priority number (copied the code from completion validation with some changes) """
+    """ Error check the priority number (copied the code from completion validation with some changes) """
     is_int = False
     try:
         number = int(number)
@@ -185,11 +205,12 @@ def priority_validation(number):
 
 def cost_validation(number):
     """
-    Error check and validate the cost number
+    Error check validate the cost number
     (copied the code from priority validation with some changes for float)
     """
     is_float = False
     try:
+        number = float(number)
         if number < 0:
             print("Cannot be less than 0")
         else:
@@ -200,7 +221,7 @@ def cost_validation(number):
 
 
 def completion_validation(number):
-    """ Error check and validate the completion number """
+    """ Error check the completion number """
     is_int = False
     try:
         number = int(number)
