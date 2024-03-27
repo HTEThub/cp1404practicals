@@ -1,5 +1,6 @@
 from datetime import datetime
 from project import Project
+import subprocess
 
 DEFAULT_FILE = "projects.txt"
 
@@ -18,17 +19,38 @@ def main():
     # for project in projects:  # checking if the contents are correct
     #     print(project)
     print("Welcome to Pythonic Project Management")
-    print(f"Loaded {len(projects)} projects from projects.txt")
+    print(f"Loaded {len(projects)} projects from {DEFAULT_FILE}")
     print(MENU)
 
     choice = input(">>> ").upper()
     while choice != "Q":
         if choice == "L":
             filename = input("Enter File Name: ")
-            load_projects(filename, projects)
+            while filename.strip() != "":
+                if not filename.endswith(".txt"):
+                    print("Provide a file name with .txt extension")
+                    filename = input("Enter File Name: ")
+                else:
+                    projects = []
+                    load_projects(filename, projects)
+                    print(f"Loaded {len(projects)} projects from {filename}")
+                    break
+            if filename.strip() == "":
+                print("Canceled Loading")
+
         elif choice == "S":
             filename = input("Enter File Name: ")
-            save_projects(filename, projects)
+            while filename.strip() != "":
+                if not filename.endswith(".txt"):
+                    print("Provide a file name with .txt extension")
+                    filename = input("Enter File Name: ")
+                else:
+                    save_projects(filename, projects)
+                    print(f"Saved {len(projects)} projects from {filename}")
+                    break
+            if filename.strip() == "":
+                print("Canceled Saving")
+
         elif choice == "D":
             display_projects(projects)
         elif choice == "F":
@@ -43,6 +65,17 @@ def main():
         print("----------")
         print(MENU)
         choice = input(">>> ").upper()
+
+    save_choice = input(f"Would you like to save to {DEFAULT_FILE}? (Y/N): ").strip().upper()
+    while save_choice != "Y" and save_choice != "N":
+        print("Invalid Input")
+        save_choice = input(f"Would you like to save to {DEFAULT_FILE}? (Y/N): ").strip().upper()
+    if save_choice == "Y":
+        save_projects(DEFAULT_FILE, projects)
+        print(f"{len(projects)} project/s saved to {DEFAULT_FILE}")
+    else:
+        print("No project saved")
+    print("Thank you for using custom-built project manager")
 
 
 """ Main Choices Functions """
@@ -61,10 +94,10 @@ def load_projects(filename, projects):
 def save_projects(filename, projects):
     """ Open a given file and write into it with each Project attribute in the required format """
     with open(filename, 'w', newline="") as out_file:
-        out_file.write(f"Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage")
+        out_file.write(f"Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage\n")
         for project in projects:
-            out_file.write(f"{project.name}\t{project.start_date}\t{project.priority}\t{project.cost_estimate}\t"
-                           f"{project.completion}\n")
+            out_file.write(f"{project.name}\t{project.start_date.strftime('%d/%m/%Y')}\t{project.priority}\t"
+                           f"{project.cost_estimate}\t{project.completion}\n")
 
 
 def display_projects(projects):
@@ -113,9 +146,9 @@ def add_new_project(projects):
         print("Cannot be blank")
         proj_name = input("Enter Project Name: ").strip()
 
-    start_date = input("Enter Start Date (dd/mm/yyyy): ").strip()
+    start_date = input("Enter Start Date (d/m/yyyy): ").strip()
     while not date_validation(start_date):
-        start_date = input("Enter Start Date (dd/mm/yyyy): ").strip()
+        start_date = input("Enter Start Date (d/m/yyyy): ").strip()
 
     priority = input("Enter Priority: ").strip()
     while not priority_validation(priority):
