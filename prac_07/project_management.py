@@ -34,9 +34,9 @@ def main():
         elif choice == "F":
             filter_projects(projects)
         elif choice == "A":
-            add_new_projects()
+            add_new_project(projects)
         elif choice == "U":
-            update_project()
+            update_project(projects)
         else:
             print("Invalid Input")
 
@@ -102,6 +102,117 @@ def filter_projects(projects):
 
     for project in filtered_projects:
         print(project)
+
+
+def add_new_project(projects):
+    """ Get user inputs for new project and add it into projects """
+    proj_name = input("Enter Project Name: ")
+    start_date = input("Enter Start Date (dd/mm/yyyy): ")
+    priority = int(input("Enter Priority: "))
+    cost_estimate = float(input("Enter Cost Estimate: $ "))
+    completion = int(input("Enter Completion: %"))
+
+    new_proj = Project(proj_name, start_date, priority, cost_estimate, completion)
+    projects.append(new_proj)
+    print(new_proj)
+    print(f"{proj_name} has been added")
+
+
+def update_project(projects):
+    """ Let user choose a project from a list of projects and update on completion and priority """
+    for i, project in enumerate(projects):
+        print(f"{i}. {project}")
+
+    project = []
+    project = choice_index_validation(project, projects)
+    print(f"\n{project}")
+
+    new_completion = input("Update Completion (leave blank to skip): ").strip()
+    while new_completion != "":
+        if completion_validation(new_completion):
+            project.completion = int(new_completion)
+            # print(project)  #checking
+            break
+        else:
+            new_completion = input("Update Completion (leave blank to skip): ").strip()
+
+    new_priority = input("Update Priority (leave blank to skip): ").strip()
+    while new_priority != "":
+        if completion_validation(new_priority):
+            project.priority = int(new_priority)
+            # print(project) #checking
+            break
+        else:
+            new_priority = input("Update Completion (leave blank to skip): ").strip()
+
+
+def date_validation(date_text):
+    try:
+        datetime_obj = datetime.strptime(date_text, '%d/%m/%Y')
+        return datetime_obj.date()
+    except ValueError:
+        print("Incorrect date format")
+        return None
+
+
+def choice_index_validation(project, projects):
+    """ Error check the choice """
+    while True:
+        try:
+            choice = int(input("Choose a Project to update: "))
+            project = projects[choice]
+            break
+        except IndexError:
+            print("Choose a number from the list")
+        except ValueError:
+            print("Has to be whole number")
+    return project
+
+
+def priority_validation(number):
+    """ Error check and validate the priority number (copied the code from completion validation with some changes) """
+    is_int = False
+    try:
+        number = int(number)
+        if number < 0:
+            print("Cannot be less than 0")
+        else:
+            is_int = True
+    except ValueError:
+        print("Has to be whole number")
+    return is_int
+
+
+def cost_validation(number):
+    """
+    Error check and validate the cost number
+    (copied the code from priority validation with some changes for float)
+    """
+    is_float = False
+    try:
+        if number < 0:
+            print("Cannot be less than 0")
+        else:
+            is_float = True
+    except ValueError:
+        print("Has to be a whole number or with decimals")
+    return is_float
+
+
+def completion_validation(number):
+    """ Error check and validate the completion number """
+    is_int = False
+    try:
+        number = int(number)
+        if number < 0:
+            print("Cannot be less than 0")
+        elif number > 100:
+            print("Cannot be over 100")
+        else:
+            is_int = True
+    except ValueError:
+        print("Has to be whole number")
+    return is_int
 
 
 main()
