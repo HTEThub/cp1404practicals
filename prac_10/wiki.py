@@ -7,11 +7,11 @@ while search_phrase.strip() != "":
     print(search_results)
     try:
         result_page = wikipedia.page(search_results[0])
-        print(result_page.title)
-        print(wikipedia.summary(result_page, sentences=1))
-        print(result_page.url)
+        print(f"Title: {result_page.title}")
+        print(f"Summary: {wikipedia.summary(result_page, sentences=1)}")
+        print(f"URL: {result_page.url}")
     except wikipedia.exceptions.DisambiguationError as e:
         print(e.options)
     except wikipedia.exceptions.PageError:
         print("Page not found.")
-    search_phrase = input("What do you want to search on wiki? >>> ")
+    search_phrase = input("What do you want to search on wiki? (Enter blank to end search) >>> ")
